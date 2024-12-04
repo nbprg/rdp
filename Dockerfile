@@ -1,7 +1,7 @@
-# Use the official Ubuntu base image
+# বেস ইমেজ হিসেবে Ubuntu 20.04 ব্যবহার করছি
 FROM ubuntu:20.04
 
-# Install necessary packages
+# প্রয়োজনীয় প্যাকেজগুলি ইনস্টল করছি
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     xfce4 \
@@ -12,18 +12,18 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Create a user and set a password
-RUN useradd -m -s /bin/bash rdpuser && \
-    echo 'rdpuser:password' | chpasswd && \
-    adduser rdpuser sudo
+# একটি নতুন ব্যবহারকারী তৈরি করছি এবং পাসওয়ার্ড সেট করছি
+RUN useradd -m -s /bin/bash nbpgytrdp && \
+    echo 'nbpgytrdp:subscribe' | chpasswd && \
+    adduser nbpgytrdp sudo
 
-# Set up xrdp
-RUN echo "rdpuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# xrdp সার্ভার কনফিগার করছি
+RUN echo "nbpgytrdp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 COPY xrdp.ini /etc/xrdp/xrdp.ini
 
-# Expose the RDP port
+# RDP পোর্ট উন্মুক্ত করছি
 EXPOSE 3389
 
-# Start xrdp and supervisor
+# xrdp এবং supervisor চালু করছি
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/bin/supervisord"]
