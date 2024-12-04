@@ -1,41 +1,29 @@
-# Dockerfile
+# Use the official Ubuntu base image
 FROM ubuntu:20.04
 
-# XFCE এবং VNC সার্ভার ইনস্টল করুন
+# Install necessary packages
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     xfce4 \
     xfce4-goodies \
-    tightvncserver \
-    xterm \
-    curl \
-    git \
-    python3 \
-    python3-pip && \
+    xrdp \
+    supervisor \
+    sudo && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# noVNC এবং websockify ইনস্টল করুন
-RUN git clone https://github.com/novnc/noVNC.git /opt/novnc && \
-    git clone https://github.com/novnc/websockify /opt/websockify && \
-    ln -s /opt/novnc/utils/novnc_proxy /usr/local/bin/novnc_proxy && \
-    pip3 install numpy==1.19.5 autobahn==20.12.3 six==1.15.0
-
-# একটি ব্যবহারকারী তৈরি করুন
+# Create a user and set a password
 RUN useradd -m -s /bin/bash rdpuser && \
-    echo 'rdpuser:password' | chpasswd
+    echo 'rdpuser:password' | chpasswd && \
+    adduser rdpuser sudo
 
-# VNC সার্ভার সেটআপ করুন
-RUN mkdir -p /home/rdpuser/.vnc && \
-    echo "password" | vncpasswd -f > /home/rdpuser/.vnc/passwd && \
-    chown -R rdpuser:rdpuser /home/rdpuser/.vnc && \
-    chmod 600 /home/rdpuser/.vnc/passwd
+# Set up xrdp
+RUN echo "rdpuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+COPY xrdp.ini /etc/xrdp/xrdp.ini
 
-# পোর্ট উন্মুক্ত করুন
-EXPOSE 5901 6080
+# Expose the RDP port
+EXPOSE 3389
 
-# স্টার্টআপ স্ক্রিপ্ট
-COPY startup.sh /opt/startup.sh
-RUN chmod +x /opt/startup.sh
-
-CMD ["/opt/startup.sh"]
+# Start xrdp and supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+CMD ["/usr/bin/supervisord"]
