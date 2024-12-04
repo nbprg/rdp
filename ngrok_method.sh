@@ -11,6 +11,6 @@ wget https://bin.equinox.io/c/4VmDzA7iaJ6/ngrok-stable-linux-amd64.zip
 unzip ngrok-stable-linux-amd64.zip
 sudo mv ngrok /usr/local/bin
 
-ngrok authtoken 
+ngrok authtoken 2plhEpD09JQm81jobgoKfKOO3aY_5TupH8pFEUCVWVXib75k4
 
 ngrok tcp 3389
