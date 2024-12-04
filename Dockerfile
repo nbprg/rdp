@@ -7,12 +7,19 @@ RUN apt-get update && \
     xfce4 \
     xfce4-goodies \
     tightvncserver \
-    novnc \
-    websockify \
     xterm \
-    curl && \
+    curl \
+    git \
+    python3 \
+    python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# noVNC এবং websockify ইনস্টল করুন
+RUN git clone https://github.com/novnc/noVNC.git /opt/novnc && \
+    git clone https://github.com/novnc/websockify /opt/websockify && \
+    ln -s /opt/novnc/utils/novnc_proxy /usr/local/bin/novnc_proxy && \
+    pip3 install -r /opt/websockify/requirements.txt
 
 # একটি ব্যবহারকারী তৈরি করুন
 RUN useradd -m -s /bin/bash rdpuser && \
