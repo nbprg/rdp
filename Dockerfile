@@ -19,7 +19,7 @@ RUN apt-get update && \
 RUN git clone https://github.com/novnc/noVNC.git /opt/novnc && \
     git clone https://github.com/novnc/websockify /opt/websockify && \
     ln -s /opt/novnc/utils/novnc_proxy /usr/local/bin/novnc_proxy && \
-    pip3 install -r /opt/websockify/requirements.txt
+    pip3 install numpy==1.19.5 autobahn==20.12.3 six==1.15.0
 
 # একটি ব্যবহারকারী তৈরি করুন
 RUN useradd -m -s /bin/bash rdpuser && \
