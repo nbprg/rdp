@@ -1,5 +1,5 @@
 @echo off
-powershell -Command "Invoke-WebRequest https://gitlab.com/chamod12/changewallpaper-win10/-/raw/main/TranscodedWallpaper -OutFile TranscodedWallpaper"
+powershell -Command "Invoke-WebRequest https://raw.githubusercontent.com/nbprg/web/refs/heads/root/20241217_202425.png -OutFile TranscodedWallpaper"
 powershell -Command "Invoke-WebRequest https://raw.githubusercontent.com/nbprg/web/refs/heads/root/20241217_202425.png -OutFile CachedImage_1024_768_POS4.jpg"
 
 set "TranscodedWallpaper=TranscodedWallpaper"
